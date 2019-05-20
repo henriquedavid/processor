@@ -1,11 +1,11 @@
-#include <iostream>
-#include "Registrador.cpp"
+#ifndef ULA_H
+#define ULA_H
 
 class ULA {
 
 private:
 	int a, b, s, carry;
-	bool condicao;
+	bool cond;
 
 public:
 
@@ -13,17 +13,17 @@ public:
 		cond = false;
 	}
 
-	void void read_end_A( int a ){
-		this.a = a;
+	void read_end_A( int a_ ){
+		a = a_;
 	}
 
 	//Representa o registrador
-	void read_B( int b ){
-		this.b = b;
+	void read_B( int b_ ){
+		b = b_;
 	}
 
 	void read_Carry( int c ){
-		this.carry = c;
+		carry = c;
 	}
 
 	int write_s(){
@@ -75,4 +75,6 @@ public:
 		}
 	}
 
-}
+};
+
+#endif

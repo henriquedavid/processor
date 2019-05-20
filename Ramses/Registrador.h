@@ -1,23 +1,26 @@
-#include <iostream>
+#ifndef REG_H
+#define REG_H
 
 class Registrador{
 	private:
-		int registrador[3];
+		std::string registrador[3];
 
 	public:
 		Registrador() {
 			// Inicializa o array.
 			for(int i = 0 ; i < 3; i++){
-				registrador[i] = 0;
+				registrador[i] = "0";
 			}
 		}
 
-		int read( int address ){
+		std::string read( int address ){
 			return registrador[address];
 		}
 
-		void write(int address, int valor){
+		void write(int address, std::string valor){
 			registrador[address] = valor;
 		}
 
-}
+};
+
+#endif

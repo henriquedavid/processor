@@ -6,15 +6,15 @@ class Regs{
 	public:
 	
 		Regs(){
-			regs = new std::string[1];
+			regs = new int[1];
 		}				
 
-		std::string readR();
+		int readR();
 
 		void writeR(int value);
 
 	private:
-		std::string *regs;
+		int *regs;
 };
 
 #endif

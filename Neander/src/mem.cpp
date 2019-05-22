@@ -1,6 +1,6 @@
 #include "mem.h"
 
-std::string Mem::readM(int adress)
+int Mem::readM(int adress)
 {
 	return mem[adress];
 }

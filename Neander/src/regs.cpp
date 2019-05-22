@@ -1,6 +1,6 @@
 #include "regs.h"
 
-std::string Regs::readR()
+int Regs::readR()
 {
 	return regs[0];
 }

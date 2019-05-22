@@ -35,15 +35,15 @@ void ULA::op(int ulaOP)
 			std::cout << a << " + " << b << " = " << s << std::endl;
 			break;
 		case 4:
-			s = a or b;
+			//s = a | b;
 			std::cout << a << " | " << b << " = " << s << std::endl;
 			break;
 		case 5:
-			s = a and b;
+			//s = a & b;
 			std::cout << a << " & " << b << " = " << s << std::endl;
 			break;
 		case 6:
-			s = not a;
+			//s = ~ a;
 			std::cout << " ~ " << a << " = " << s << std::endl;
 			break;
 		case 7:

@@ -13,13 +13,11 @@
 void readFile( Memoria & memoria ){
 
 	int mem_codigo = 0;
-	int mem_dados = 128;
 
 	std::string line;
   	std::ifstream myfile ("data.txt");
   	std::string inst;
   	std::string reg;
-  	int valor;
 
 	if (myfile.is_open())
 	{
@@ -852,8 +850,10 @@ void readFile( Memoria & memoria ){
 
     	}
     	myfile.close();
+		
   	}
 	else std::cout << "Unable to open file"; 
+
 
 }
 
@@ -865,8 +865,8 @@ int main(){
 	ULA ula;
 	PC pc(ula, reg, mem, cp);
 
-
 	readFile(mem);
+	mem.printAll();
 
 	for(int clock = 0; clock < 100; clock++){
 		pc.FS();
@@ -877,7 +877,6 @@ int main(){
 		if(pc.getLastState() == true)
 			break;
 	}
-
 
 
 	return 0;

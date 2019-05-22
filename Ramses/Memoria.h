@@ -3,7 +3,7 @@
 
 class Memoria{
 private:
-	std::string memoria[256];
+	std::string memoria[256]; // 0-127 | 128-255
 
 public:
 	Memoria(){
@@ -18,7 +18,12 @@ public:
 
 	void write(int address, std::string valor){
 		memoria[address] = valor;
-		std::cout << "valor: " << valor << std::endl;
+	}
+
+	void printAll(){
+		for(int i = 0; i < 256 ; i++){
+			std::cout << memoria[i] << std::endl;
+		}
 	}
 };
 

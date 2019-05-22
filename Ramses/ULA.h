@@ -13,7 +13,7 @@ public:
 		cond = false;
 	}
 
-	void read_end_A( int a_ ){
+	void read_A( int a_ ){
 		a = a_;
 	}
 
@@ -34,42 +34,42 @@ public:
 		return cond;
 	}
 
-	void operacao( int op )
+	void operacao( std::string op )
 	{
 		switch (op){
-			case 0000:
+			case "0000":
 					break;
-			case 0001:
+			case "0001":
 					s = b;
 					break;
-			case 0010:
+			case "0010":
 					s = a;
 					break;
-			case 0011: s = a + b;
+			case "0011": s = a + b;
 					break;
-			case 0100: s = a or b;
+			case "0100": s = a or b;
 					break;
-			case 0101: s = a and b;
+			case "0101": s = a and b;
 					break;
-			case 0110: s = not b;
+			case "0110": s = not b;
 					break;
-			case 0111: s = b - a;
+			case "0111": s = b - a;
 					break;
-			case 1000: s = a;
+			case "1000": s = a;
 					break;
-			case 1001: if( b < 1 ) s = a;
+			case "1001": if( b < 1 ) s = a;
 					break;
-			case 1010: if( b == 0 ) s = a;
+			case "1010": if( b == 0 ) s = a;
 					break;
-			case 1011: if( carry == 1-a ) s = a;
+			case "1011": if( carry == 1-a ) s = a;
 					break;
-			case 1100: s = a; a++;
+			case "1100": s = a; a++;
 					break;
-			case 1101: a < 0 ? s = a : s = not a;
+			case "1101": a < 0 ? s = a : s = not a;
 					break;
-			case 1110: s = a/2;
+			case "1110": s = a/2;
 					break;
-			case 1111: break;
+			case "1111": break;
 			default:
 					break;
 		}

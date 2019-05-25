@@ -21,6 +21,10 @@ class Registrador{
 			registrador[address] = valor;
 		}
 
+		void printRegistradores(){
+			std::cout << registrador[0] << " - " << registrador[1] << " - " << registrador[2] << std::endl;
+		}
+
 };
 
 #endif

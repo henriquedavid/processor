@@ -10,7 +10,7 @@
 #include "CP.h"
 #include "PC.h"
 
-void readFile( Memoria & memoria ){
+void readFile( Memoria & memoria, CP & cp_ ){
 
 	int mem_codigo = 0;
 
@@ -412,274 +412,25 @@ void readFile( Memoria & memoria ){
     			}
     			
     		} else if(inst == "JMP"){
-    			if(not iss.eof()){
-    				iss >> inst;
-    				if(inst == "RA"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10000000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10000001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10000010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10000011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RB"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10000100");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10000101");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10000110");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10000111");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RX"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10001000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10001001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10001010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10001011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				}
-    			}
+    			memoria.write(mem_codigo, "10000000");
+    			mem_codigo++;
     			
     		} else if(inst == "JN"){
-    			if(not iss.eof()){
-    				iss >> inst;
-    				if(inst == "RA"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10010000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10010001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10010010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10010011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RB"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10010100");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10010101");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10010110");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10010111");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RX"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10011000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10011001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10011010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10011011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				}
-    			}
+    			memoria.write(mem_codigo, "10010000");
+    			mem_codigo++;
     			
     		} else if(inst == "JZ"){
-    			if(not iss.eof()){
-    				iss >> inst;
-    				if(inst == "RA"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10100000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10100001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10100010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10100011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RB"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10100100");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10100101");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10100110");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10100111");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RX"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10101000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10101001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10101010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10101011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				}
-    			}
-    			
+    			memoria.write(mem_codigo, "10100000");
+    			mem_codigo++;
+
     		} else if(inst == "JC"){
-    			if(not iss.eof()){
-    				iss >> inst;
-    				if(inst == "RA"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10110000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10110001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10110010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10110011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RB"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10110100");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10110101");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10110110");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10110111");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RX"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "10111000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "10111001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "10111010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "10111011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				}
-    			}
+    			memoria.write(mem_codigo, "10110000");
+    			mem_codigo++;
+
     			
     		} else if(inst == "JSR"){
-    			if(not iss.eof()){
-    				iss >> inst;
-    				if(inst == "RA"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "11000000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "11000001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "11000010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "11000011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RB"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "11000100");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "11000101");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "11000110");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "11000111");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RX"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "11001000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "11001001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "11001010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "11001011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				}
-    			}
+    			memoria.write(mem_codigo, "11000000");
+    			mem_codigo++;
     			
     		} else if(inst == "NEG"){
     			if(not iss.eof()){
@@ -791,58 +542,8 @@ void readFile( Memoria & memoria ){
     			
     		} else if(inst == "HTL"){
 
-    			if(not iss.eof()){
-    				iss >> inst;
-    				if(inst == "RA"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "11110000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "11110001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "11110010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "11110011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RB"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "11110100");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "11110101");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "11110110");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "11110111");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				} else if(inst == "RX"){
-    					if(not iss.eof()){
-    						iss >> inst;
-    						if(inst == "00")
-	    						memoria.write(mem_codigo, "11111000");
-	    					else if(inst == "01")
-	    						memoria.write(mem_codigo, "11111001");
-	    					else if(inst == "10")
-	    						memoria.write(mem_codigo, "11111010");
-	    					else if(inst == "11")
-	    						memoria.write(mem_codigo, "11111011");
-	    					else{
-	    						// nothing;
-	    					}
-	    					mem_codigo++;
-    					}
-    				}
-    			}
+    			memoria.write(mem_codigo, "11110000");
+    			mem_codigo++;
     			
     		} else {
     			std::cout << "Foi encontrado um código não válido.\n";
@@ -855,6 +556,13 @@ void readFile( Memoria & memoria ){
 	else std::cout << "Unable to open file"; 
 
 
+	int a = 0;
+	for(int i = 0; i < 256; i++){
+		if(memoria.read(i) != "0")
+			a++;
+	}
+	cp_.setEnd(a);
+
 }
 
 int main(){
@@ -863,13 +571,16 @@ int main(){
 	Memoria mem;
 	CP cp;
 	ULA ula;
+	
+
+	readFile(mem, cp);
+	mem.printAll();
+	cp.zerar();
 	PC pc(ula, reg, mem, cp);
 
-	readFile(mem);
-	mem.printAll();
-
 	for(int clock = 0; clock < 100; clock++){
-		pc.FS();
+		//pc.FS();
+
 		pc.FTE();
 
 		pc.updateState();
@@ -877,7 +588,6 @@ int main(){
 		if(pc.getLastState() == true)
 			break;
 	}
-
 
 	return 0;
 }

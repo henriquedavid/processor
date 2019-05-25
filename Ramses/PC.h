@@ -12,51 +12,108 @@ private:
 	int mem_dat;
 
 public:
-	PC(ULA ula_, Registrador rg_, Memoria mem_, CP cp_){
+	PC(ULA & ula_, Registrador & rg_, Memoria &  mem_, CP & cp_){
 		ula = ula_;
 		reg = rg_;
 		mem = mem_;
 		cp = cp_;
+		EA = 0;
+		PE = 0;
 		mem_dat = 128;
 	}
 
-	void FTE(){
-		switch(EA){	// Cada estado representará uma instrução.
+	int stringToInt(std::string valor_){
+		int valor;
+		std::istringstream iss(valor_);
+		iss >> valor;
+		if(iss.good()){
+			return valor;
+		}
+		return 0;
+	}
 
-			case 0:	// Definir as condições iniciais de valores.
-				mem.write(128, "00000001");
-				mem.write(129, "00000001");
-				break;
+	std::string intToString(int valor_){
+		std::string valor = std::to_string(valor_);
+		return valor;
+	}
 
-			case 1: // Representando 0001
-				std::string inst = mem.read(cp.getPosition());
-				// Distribuir para os registradores
-				if( inst.substr(5,7) == "00" )
-					mem.write( mem_dat , reg.read(0) );
-				else if( inst.substr(5, 7) == "01" )
-					mem.write( mem_dat , reg.read(1) );
-				else if( inst.substr(5, 7) == "10" )
-					mem.write( mem_dat , reg.read(2) );
-				else{}
+	void CASO01(){
+		std::string inst;
+		inst = mem.read( cp.getPosition() );
+		// Distribuir para os registradores
+		if( inst.substr(5,7) == "00" )
+			mem.write( mem_dat , reg.read(0) );
+		else if( inst.substr(5, 7) == "01" )
+			mem.write( mem_dat , reg.read(1) );
+		else if( inst.substr(5, 7) == "10" )
+			mem.write( mem_dat , reg.read(2) );
+		else{}
 				
-				mem_dat++;
-				PE = cp.getPosition() + 1;
-				break;
-			
-			case 2:	// Representando 0010
-				std::string inst = mem.read(cp.getPosition());
+		mem_dat++;
+		PE = cp.getPosition() + 1;
+	}
+
+	void CASO02(){
+		std::cout << "COMEÇOU A LEITURA\n";
+
+		std::string inst = mem.read(cp.getPosition());
+
+		if( (inst.substr(4,5)).substr(0,2) == "00" )
+			reg.write( 0 , mem.read(mem_dat) );
+		else if( (inst.substr(4,5)).substr(0,2) == "01" )
+			reg.write( 1 , mem.read(mem_dat) );
+		else if( (inst.substr(4,5)).substr(0,2) == "10" )
+			reg.write( 2 , mem.read(mem_dat) );
+		else{
+			std::cout << "ERROR!\n\n";
+		}
+
+		reg.printRegistradores();
+		cp.increase();
+		PE = cp.getPosition() + 1;
+	}
+
+	void CASO03(){
+
+		std::cout << "COMEÇOU A SOMA\n";
+
+
+		std::string inst = mem.read(cp.getPosition());
+
+		std::cout << "INST = " << inst << std::endl;
+		ula.read_A( stringToInt(mem.read(mem_dat)) );
+
+		std::cout << "REALIZADO!\n";
+		if( (inst.substr(4,5)).substr(0,2) == "00" )
+			ula.read_B( stringToInt( reg.read(0)) );
+		else if( (inst.substr(4,5)).substr(0,2) == "01" )
+			ula.read_B( stringToInt( reg.read(1)) );
+		else if( (inst.substr(4,5)).substr(0,2) == "10" )
+			ula.read_B( stringToInt( reg.read(2)) );
+		else{
+			std::cout << "ERROR\n";
+		}
+
+		ula.op(stringToInt(inst.substr(0,4)));
+		cp.increase();
+		PE = 4;
+	}
+
+	void CASO04(){
+		std::string inst = mem.read(cp.getPosition());
+
 				if( inst.substr(5,7) == "00" )
-					reg.write( 0 , mem.read(mem_dat) );
+					reg.write( 0, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "01" )
-					mem.write( 1 , mem.read(mem_dat) );
+					reg.write( 1, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "10" )
-					mem.write( 2 , mem.read(mem_dat) );
+					reg.write( 2, intToString(ula.write_s()) );
 				else{}
-
 				PE = cp.getPosition() + 1;
-				break;
 
-			case 3: // Representando 0011
+			}
+
+			void CASO05(){
 				std::string inst = mem.read(cp.getPosition());
 				ula.read_A( stringToInt(mem.read(mem_dat)) );
 
@@ -68,50 +125,24 @@ public:
 					ula.read_B( stringToInt( reg.read(2)) );
 				else{}
 
-				ula.op(inst.substr(0,4));
-
-				PE = 4;
-				break;
-
-			case 4:
-				if( inst.substr(5,7) == "00" )
-					reg.write( 0, ula.write_s() );
-				else if( inst.substr(5, 7) == "01" )
-					reg.write( 1, ula.write_s() );
-				else if( inst.substr(5, 7) == "10" )
-					reg.write( 2, ula.write_s() );
-				else{}
-				PE = cp.getPosition() + 1;
-				break;
-
-			case 5: // Representando 0100
-				std::string inst = mem.read(cp.getPosition());
-				ula.read_A( stringToInt(mem.read(mem_dat)) );
-
-				if( inst.substr(5,7) == "00" )
-					ula.read_B( stringToInt( reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
-					ula.read_B( stringToInt( reg.read(1)) );
-				else if( inst.substr(5, 7) == "10" )
-					ula.read_B( stringToInt( reg.read(2)) );
-				else{}
-
-				ula.op(inst.substr(0,4));
+				ula.op(stringToInt(inst.substr(0,4)));
 				PE = 6;
-				break;
+			}
 
-			case 6:
+			void CASO06(){
+				std::string inst = mem.read(cp.getPosition());
 				if( inst.substr(5,7) == "00" )
-					reg.write( 0, ula.write_s() );
+					reg.write( 0, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "01" )
-					reg.write( 1, ula.write_s() );
+					reg.write( 1, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "10" )
-					reg.write( 2, ula.write_s() );
+					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
-				break;
+		}
 
-			case 7: // Representando 0101
+		void CASO07(){
+
 				std::string inst = mem.read(cp.getPosition());
 				ula.read_A( stringToInt(mem.read(mem_dat)) );
 
@@ -123,22 +154,26 @@ public:
 					ula.read_B( stringToInt( reg.read(2)) );
 				else{}
 
-				ula.op(inst.substr(0,4));
+				ula.op(stringToInt(inst.substr(0,4)));
 				PE = 8;
-				break;
+			}
 
-			case 8:
+			void CASO08(){
+				std::string inst = mem.read(cp.getPosition());
+
 				if( inst.substr(5,7) == "00" )
-					reg.write( 0, ula.write_s() );
+					reg.write( 0, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "01" )
-					reg.write( 1, ula.write_s() );
+					reg.write( 1, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "10" )
-					reg.write( 2, ula.write_s() );
+					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
-				break;
-			
-			case 9: // Representando 0110
+			}
+
+			void CASO09(){			
+
+				std::string inst = mem.read(cp.getPosition());
 				if( inst.substr(5,7) == "00" )
 					ula.read_A( stringToInt( reg.read(0)) );
 				else if( inst.substr(5, 7) == "01" )
@@ -147,22 +182,24 @@ public:
 					ula.read_A( stringToInt( reg.read(2)) );
 				else{}
 
-				ula.op(inst.substr(0,4));
-				PE = 10
-				break;
+				ula.op(stringToInt(inst.substr(0,4)));
+				PE = 10;
+			}
 
-			case 10:
+			void CASO10(){
+				std::string inst = mem.read(cp.getPosition());
+
 				if( inst.substr(5,7) == "00" )
-					reg.write( 0, ula.write_s() );
+					reg.write( 0, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "01" )
-					reg.write( 1, ula.write_s() );
+					reg.write( 1, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "10" )
-					reg.write( 2, ula.write_s() );
+					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
-				break;
+			}
 
-			case 11: // Representando 0111
+			void CASO11(){
 				std::string inst = mem.read(cp.getPosition());
 				ula.read_B( stringToInt(mem.read(mem_dat)) );
 
@@ -174,34 +211,197 @@ public:
 					ula.read_A( stringToInt( reg.read(2)) );
 				else{}
 
-				ula.op(inst.substr(0,4));
+				ula.op(stringToInt(inst.substr(0,4)));
 
-				PE = 4;
-				break;
+				PE = 12;
+			}
 
-			case 12:
+			void CASO12(){
+				std::string inst = mem.read(cp.getPosition());
+
 				if( inst.substr(5,7) == "00" )
-					reg.write( 0, ula.write_s() );
+					reg.write( 0, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "01" )
-					reg.write( 1, ula.write_s() );
+					reg.write( 1, intToString(ula.write_s()) );
 				else if( inst.substr(5, 7) == "10" )
-					reg.write( 2, ula.write_s() );
+					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
-				break;
+			}
 
-			case 13: // Representando 1000
+			void CASO13(){
 				cp.setPosition(mem_dat);
-				break;
+				PE = cp.getPosition() + 1;
+			}
 
-			case 14: // Representando 1001
-				
-				break;
+			void CASO14(){
 
-			case 15:
+			}
+
+			void CASO15(){
+
+			}
+
+			void CASO16(){
+
+			}
+
+			void CASO17(){
+
+			}
+
+			void CASO18(){
+				std::string inst = mem.read(cp.getPosition());
+
+				if( inst.substr(5,7) == "00" )
+					ula.read_A( stringToInt(reg.read(0)) );
+				else if( inst.substr(5, 7) == "01" )
+					ula.read_A( stringToInt(reg.read(0)) );
+				else if( inst.substr(5, 7) == "10" )
+					ula.read_A( stringToInt(reg.read(0)) );
+				else{}
+					PE = 19;
+			}
+
+			void CASO19(){
+				std::string inst = mem.read(cp.getPosition());
+
+				ula.op(stringToInt("1101"));
+				if( inst.substr(5,7) == "00" )
+					reg.write( 0, intToString(ula.write_s()) );
+				else if( inst.substr(5, 7) == "01" )
+					reg.write( 1, intToString(ula.write_s()) );
+				else if( inst.substr(5, 7) == "10" )
+					reg.write( 2, intToString(ula.write_s()) );
+				else{}
+				PE = cp.getPosition() + 1;
+			}
+
+			void CASO20(){
+				std::string inst = mem.read(cp.getPosition());
+
+				if( inst.substr(5,7) == "00" )
+					ula.read_A( stringToInt(reg.read(0)) );
+				else if( inst.substr(5, 7) == "01" )
+					ula.read_A( stringToInt(reg.read(0)) );
+				else if( inst.substr(5, 7) == "10" )
+					ula.read_A( stringToInt(reg.read(0)) );
+				else{}
+				PE = 21;
+			}
+
+			void CASO21(){
+				std::string inst = mem.read(cp.getPosition());
+
+				ula.op(stringToInt("1110"));
+				if( inst.substr(5,7) == "00" )
+					reg.write( 0, intToString(ula.write_s()) );
+				else if( inst.substr(5, 7) == "01" )
+					reg.write( 1, intToString(ula.write_s()) );
+				else if( inst.substr(5, 7) == "10" )
+					reg.write( 2, intToString(ula.write_s()) );
+				else{}
+				PE = cp.getPosition() + 1;
+			}
+			
+			void CASO22(){ // Representando 1111 HTL
+				cp.goToEnd();
+			}
+
+			
+
+
+	void FTE(){
+
+		//std::cout << "Posição: "<< cp.getPosition() <<"\nValor na Memória = " << mem.read(cp.getPosition()) << std::endl;
+		//reg.printRegistradores();
+
+		if( mem.read(cp.getPosition()).substr(0, 4) == "0000" )
+			EA = 0;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0001" )
+			EA = 1;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0010" )
+			EA = 2;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0011" )
+			EA = 3;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0100" )
+			EA = 5;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0101" )
+			EA = 7;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0110" )
+			EA = 9;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "0111" )
+			EA = 13;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1000" )
+			EA = 14;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1001" )
+			EA = 15;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1010" )
+			EA = 16;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1011" )
+			EA = 17;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1100" )
+			EA = 18;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1101" )
+			EA = 20;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1110" )
+			EA = 22;
+		else if( mem.read(cp.getPosition()).substr(0, 4) == "1111" )
+			EA = 1;
+		else{}
+
+		switch(EA){	// Cada estado representará uma instrução.
+
+			case 0:	break;
+
+			case 1: CASO01(); break;
+			
+			case 2:	CASO02(); break;
+
+			case 3: CASO03(); break;
+
+			case 4: CASO04(); break;
+
+			case 5: CASO05(); break;
+
+			case 6: CASO06(); break;
+
+			case 7: CASO07(); break;
+
+			case 8: CASO08(); break;
+
+			case 9: CASO09(); break;
+
+			case 10: CASO10(); break;
+
+			case 11: CASO11(); break;
+
+			case 12: CASO12(); break;
+
+			case 13: CASO13(); break;
+
+			case 14: CASO14(); break;
+
+			case 15: CASO15(); break;
+
+			case 16: CASO16(); break;
+
+			case 17: CASO17(); break;
+
+			case 18: CASO18(); break;
+
+			case 19: CASO19(); break;
+
+			case 20: CASO20(); break;
+
+			case 21: CASO21(); break;
+
+			case 22: CASO22(); break;
+
+			default:
 				break;
-			default: break;
 		}
+
 	}
 
 	void FS(){
@@ -220,21 +420,7 @@ public:
 		return lastState;
 	}
 
-	int stringToInt(std::string valor_){
-		int valor;
-		std::istringstream iss(valor_);
-		iss >> valor;
-		if(iss.good())
-			return valor;
-	}
-
-	std::string intToString(int valor_){
-		std::string valor;
-		std::istringstream iss(valor_);
-		iss >> valor;
-		if(iss.good())
-			return valor;
-	}
+	
 };
 
 #endif

@@ -4,10 +4,12 @@
 class CP{
 private:
 	int i;
+	int total;
 
 public:
 	CP(){
 		i = 0;
+		total = 0;	
 	}
 
 	void zerar(){
@@ -24,6 +26,14 @@ public:
 
 	int getPosition(){
 		return i;
+	}
+
+	void goToEnd(){
+		i = total;
+	}
+
+	void setEnd(int valor){
+		i = valor;
 	}
 };
 

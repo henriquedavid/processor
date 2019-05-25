@@ -10,12 +10,11 @@ class PC{
 	
 	public:
 	
-		PC(ULA _ula, Regs _regs, Mem _mem, AP & _ap){
+		PC(ULA & _ula, Regs & _regs, Mem & _mem, AP & _ap){
 			ula = _ula;
 			regs = _regs;
 			mem = _mem;
 			ap = _ap;
-			ap.zerar();
 			lastState = false;
 			EA = 0;
 		}
@@ -25,6 +24,8 @@ class PC{
 		void updateState();
 
 		bool getLastState();
+
+		int binaryToDecimal(std::string);
 
 
 	private:

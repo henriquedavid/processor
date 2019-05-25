@@ -1,85 +1,69 @@
 #include "pc.h"
-#include "aux.h"
 #include <cstring>
+#include <cmath>
 
 void PC::FTE()
 {
-	if(mem.readM(ap.getPosition()) == 0)
-	{
-		EA = 1;
-	}
-	else if(mem.readM(ap.getPosition) == 1)
-	{
-		EA = 2;
-	}
-	else if(mem.readM(ap.getPosition()) == 2)
-	{
-		EA = 3;
-	}
-	else if(mem.readM(ap.getPosition()) == 3)
-	{
-		EA = 3;
-	}
-	else if(mem.readM(ap.getPosition()) == 6)
-	{
-		EA = 8;
-	}
-	else if(mem.readM(ap.getPosition()) == 7)
-	{
-		EA = 9;
-	}
-	else if(mem.readM(ap.getPosition()) == 8)
-	{
-		EA = 10;
-	}
-	else if(mem.readM(ap.getPosition()) == 9)
-	{
-		EA = 11;
-	}
-
 	switch(EA)
 	{
-		case 0 :
-			EA = 10;
+		case 0 :	//Colocando valores na memoria.
+			mem.writeM(128, binaryToDecimal("11011100"));	//220
+			mem.writeM(129, binaryToDecimal("10100111"));	//167
+			PE = mem.readM(ap.getPosition());
 			break;
-		case 1 :
-			ula.readA(regs.readR());
-			ula.op(1);
-			mem.writeM(ap.getPosition() + 1, ula.writeResult());
-			break;
-		case 2 :
+		case 1 :	//NOP - Não faz nada.
+
 			break;
 
-		case 3 :	
-			mem.writeM(128, converter("11011100"));	//220
-			mem.writeM(129, converter("10100111"));	//167
-			mem.writeM(200, converter("10110001"));	//177
-	        PE = 4;			 
-	        break;    
-	    case 4 :
-	     	ula.readA(mem.readM(mem.readM(ap.getPosition() + 1)));	//
-            PE = 5;													//
-            break; 													//
-	    case 5 :													//
-	        ula.readB(regs.readR());								//
-	        PE = 6;													//
-	        break;													//
-	    case 6 :													//
-	        ula.op(mem.readM(ap.getPosition()));					//
-	        ap.increase();											//
-	        PE = 7;													//					
-	    	break;													//
-	    case 7 :  													//
-	        regs.writeR(ula.writeResult());							//ADD e LDA
-	        PE = 10;
-	        break;
-	    case 8 :													//STA
+		case 2:		//STA - Memória <- Acumulador
+		
+			ula.readA(regs.readR());
+			ula.op(mem.readM(ap.getPosition()));
+			mem.writeM(mem.readM(ap.getPosition() + 1), ula.writeResult());
+
+	    	ap.increase();
+	    	PE = mem.readM(ap.getPosition());
 	    	break;
-	    case 9 : 
+	    
+	    case 3:		//LDA - Acumulador <- Memória
+	  
+			ula.readA(mem.readM(mem.readM(ap.getPosition() + 1)));
+			ula.op(mem.readM(ap.getPosition()));
+			regs.writeR(ula.writeResult());
+
+			ap.increase();
+			PE = mem.readM(ap.getPosition());
 	    	break;
-	    case 10 :
-	    	lastState = true;
-	    	break;
+
+	    case 4:		//ADD - Acumulador <- Acumulador + Memória
+
+	    	ula.readA(regs.readR());
+	    	ula.readB(mem.readM(mem.readM(ap.getPosition() + 1)));
+	    	ula.op(mem.readM(ap.getPosition()));
+	    	regs.writeR(ula.writeResult());
+
+			ap.increase();
+			PE = mem.readM(ap.getPosition());
+
+			break;
+
+		case 8:		//JMP - Apontador de programa <- endereco
+
+			ula.readA(mem.readM(mem.readM(ap.getPosition() + 1)));
+			ula.op(mem.readM(ap.getPosition()));
+			ap.setPosition(ula.writeResult());
+			std::cout << ula.writeResult() << "\n";
+			
+			PE = mem.readM(ap.getPosition());
+
+			break;
+
+		case 11:	//HLT - Finaliza o programa
+	
+			lastState = true;
+
+			break;
+
 	    default: 
 	      	break;    
 	}
@@ -93,4 +77,40 @@ void PC::updateState()
 bool PC::getLastState()
 {
 	return lastState;
+}
+
+int PC::binaryToDecimal(std::string s)
+{
+	char str[s.length()];
+
+	strcpy(str, s.c_str());
+
+	int value = 0;
+	
+	for(unsigned int i = s.length() - 1; i >= 0; i--)
+	{
+		if(str[i] == '0')
+		{
+			str[i] = '1';
+		}
+		else
+		{
+			str[i] = '0';
+		}
+	}
+
+	for(unsigned int i = s.length - 1; i >= 0; i--)
+	{
+		if(str[i] == '0')
+		{
+			str[i] = '1';
+			break;
+		}
+		else
+		{
+			str[i] = '0';
+		}
+	}
+
+	return value;
 }

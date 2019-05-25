@@ -7,6 +7,7 @@ class Regs{
 	
 		Regs(){
 			regs = new int[1];
+			regs[0] = 0;
 		}				
 
 		int readR();

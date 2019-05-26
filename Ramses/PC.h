@@ -18,7 +18,7 @@ public:
 		mem = mem_;
 		cp = cp_;
 		EA = 0;
-		PE = 0;
+		PE = 1;
 		mem_dat = 128;
 	}
 
@@ -26,10 +26,7 @@ public:
 		int valor;
 		std::istringstream iss(valor_);
 		iss >> valor;
-		if(iss.good()){
-			return valor;
-		}
-		return 0;
+		return valor;
 	}
 
 	std::string intToString(int valor_){
@@ -50,7 +47,6 @@ public:
 		else{}
 				
 		mem_dat++;
-		PE = cp.getPosition() + 1;
 	}
 
 	void CASO02(){
@@ -70,48 +66,58 @@ public:
 
 		reg.printRegistradores();
 		cp.increase();
-		PE = cp.getPosition() + 1;
 	}
 
 	void CASO03(){
 
-		std::cout << "COMEÇOU A SOMA\n";
+		std::cout << "\n\n\n\nCOMEÇOU A SOMA\n";
 
 
 		std::string inst = mem.read(cp.getPosition());
 
-		std::cout << "INST = " << inst << std::endl;
-		ula.read_A( stringToInt(mem.read(mem_dat)) );
+		ula.read_A( stringToInt(mem.read(129)) );
 
-		std::cout << "REALIZADO!\n";
+
 		if( (inst.substr(4,5)).substr(0,2) == "00" )
 			ula.read_B( stringToInt( reg.read(0)) );
-		else if( (inst.substr(4,5)).substr(0,2) == "01" )
+		else if( (inst.substr(4,5)).substr(0,2) == "01" ){
 			ula.read_B( stringToInt( reg.read(1)) );
+		}
 		else if( (inst.substr(4,5)).substr(0,2) == "10" )
 			ula.read_B( stringToInt( reg.read(2)) );
 		else{
 			std::cout << "ERROR\n";
 		}
 
+		reg.printRegistradores();
+
+		std::cout << "VALOR1 = " << stringToInt(inst.substr(0,4)) << std::endl;
 		ula.op(stringToInt(inst.substr(0,4)));
 		cp.increase();
 		PE = 4;
 	}
 
 	void CASO04(){
+
+		std::cout << "\n\nResultado da soma\n";
+		cp.down();
 		std::string inst = mem.read(cp.getPosition());
 
-				if( inst.substr(5,7) == "00" )
-					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
-					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
-					reg.write( 2, intToString(ula.write_s()) );
-				else{}
-				PE = cp.getPosition() + 1;
+		std::cout << "INST:  " << inst << std::endl;
 
-			}
+		if( inst.substr(5,7) == "00" )
+			reg.write( 0, intToString(ula.write_s()) );
+		else if( inst.substr(5, 7) == "01" )
+			reg.write( 1, intToString(ula.write_s()) );
+		else if( inst.substr(5, 7) == "10" )
+			reg.write( 2, intToString(ula.write_s()) );
+		else{}
+
+		PE = 0;
+		reg.printRegistradores();
+		cp.increase();
+
+	}
 
 			void CASO05(){
 				std::string inst = mem.read(cp.getPosition());
@@ -316,6 +322,7 @@ public:
 		//std::cout << "Posição: "<< cp.getPosition() <<"\nValor na Memória = " << mem.read(cp.getPosition()) << std::endl;
 		//reg.printRegistradores();
 
+		if(PE != 0){
 		if( mem.read(cp.getPosition()).substr(0, 4) == "0000" )
 			EA = 0;
 		else if( mem.read(cp.getPosition()).substr(0, 4) == "0001" )
@@ -348,7 +355,10 @@ public:
 			EA = 22;
 		else if( mem.read(cp.getPosition()).substr(0, 4) == "1111" )
 			EA = 1;
-		else{}
+		} else{
+			EA = PE;
+		}
+
 
 		switch(EA){	// Cada estado representará uma instrução.
 

@@ -24,6 +24,10 @@ public:
 		i += 1;
 	}
 
+	void down(){
+		i -= 1;
+	}
+
 	int getPosition(){
 		return i;
 	}
@@ -34,6 +38,10 @@ public:
 
 	void setEnd(int valor){
 		i = valor;
+	}
+
+	int getEnd(){
+		return total;
 	}
 };
 

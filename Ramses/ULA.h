@@ -30,6 +30,7 @@ public:
 	}
 
 	int write_s(){
+		std::cout << "Valor de S = " << s;
 		return s;
 	}
 
@@ -40,23 +41,24 @@ public:
 	void op( int op )
 	{
 		switch (op){
-			case 0000:
+			case 00:
 					break;
-			case 0001:
+			case 1:
 					s = b;
 					break;
-			case 0010:
+			case 10:
 					s = a;
 					break;
-			case 0011: s = a + b;
+			case 11: s = a + b;
+					std::cout << a << " + " << b << " = " << s; 
 					break;
-			case 0100: s = a or b;
+			case 100: s = a or b;
 					break;
-			case 0101: s = a and b;
+			case 101: s = a and b;
 					break;
-			case 0110: s = not b;
+			case 110: s = not b;
 					break;
-			case 0111: s = b - a;
+			case 111: s = b - a;
 					break;
 			case 1000: s = a;
 					break;

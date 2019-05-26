@@ -30,7 +30,7 @@ public:
 	}
 
 	int write_s(){
-		std::cout << "Valor de S = " << s;
+		std::cout << "Valor de S = " << s << std::endl;
 		return s;
 	}
 

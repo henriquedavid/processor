@@ -1,6 +1,9 @@
 #ifndef PC_H
 #define PC_H
 
+#include <string.h>
+#include <algorithm>
+
 class PC{
 private:
 	int EA, PE;
@@ -34,15 +37,47 @@ public:
 		return valor;
 	}
 
+	std::string inttoBitString(int valor){
+
+		std::string r = "";
+		int num = valor;
+
+		std::vector<std::string> bin;
+
+		while(num != 1){
+			int resto = num % 2;
+			if(resto == 0){
+				bin.push_back("0");
+			} else{
+				bin.push_back("1");
+			}
+			num = num / 2;
+		}
+
+		bin.push_back("1");
+
+		for(int a = bin.size(); a < 8; a++){
+			bin.push_back("0");
+		}
+
+		std::reverse(bin.begin(), bin.end());
+
+		for(std::vector<std::string>::iterator it = bin.begin(); it!= bin.end(); ++it)
+			r += *it;
+
+		return r;
+
+	}
+
 	void CASO01(){
 		std::string inst;
 		inst = mem.read( cp.getPosition() );
 		// Distribuir para os registradores
-		if( inst.substr(5,7) == "00" )
+		if( (inst.substr(4,5)).substr(0,2) == "00" )
 			mem.write( mem_dat , reg.read(0) );
-		else if( inst.substr(5, 7) == "01" )
+		else if( (inst.substr(4,5)).substr(0,2) == "01" )
 			mem.write( mem_dat , reg.read(1) );
-		else if( inst.substr(5, 7) == "10" )
+		else if( (inst.substr(4,5)).substr(0,2) == "10" )
 			mem.write( mem_dat , reg.read(2) );
 		else{}
 				
@@ -105,12 +140,16 @@ public:
 
 		std::cout << "INST:  " << inst << std::endl;
 
-		if( inst.substr(5,7) == "00" )
-			reg.write( 0, intToString(ula.write_s()) );
-		else if( inst.substr(5, 7) == "01" )
-			reg.write( 1, intToString(ula.write_s()) );
-		else if( inst.substr(5, 7) == "10" )
-			reg.write( 2, intToString(ula.write_s()) );
+		std::cout << "REUSLT: " << inttoBitString(ula.write_s()) << std::endl;
+
+		if( (inst.substr(4,5)).substr(0,2) == "00" ){
+			std::cout << "ENTROUUUUUUUUUUUUUUUUU\n";
+			reg.write( 0, inttoBitString(ula.write_s()) );
+		}
+		else if( (inst.substr(4,5)).substr(0,2) == "01" )
+			reg.write( 1, inttoBitString(ula.write_s()) );
+		else if( (inst.substr(4,5)).substr(0,2) == "10" )
+			reg.write( 2, inttoBitString(ula.write_s()) );
 		else{}
 
 		PE = 0;
@@ -123,11 +162,11 @@ public:
 				std::string inst = mem.read(cp.getPosition());
 				ula.read_A( stringToInt(mem.read(mem_dat)) );
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_B( stringToInt( reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					ula.read_B( stringToInt( reg.read(1)) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					ula.read_B( stringToInt( reg.read(2)) );
 				else{}
 
@@ -137,11 +176,11 @@ public:
 
 			void CASO06(){
 				std::string inst = mem.read(cp.getPosition());
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
@@ -152,11 +191,11 @@ public:
 				std::string inst = mem.read(cp.getPosition());
 				ula.read_A( stringToInt(mem.read(mem_dat)) );
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_B( stringToInt( reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					ula.read_B( stringToInt( reg.read(1)) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					ula.read_B( stringToInt( reg.read(2)) );
 				else{}
 
@@ -167,11 +206,11 @@ public:
 			void CASO08(){
 				std::string inst = mem.read(cp.getPosition());
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
@@ -180,11 +219,11 @@ public:
 			void CASO09(){			
 
 				std::string inst = mem.read(cp.getPosition());
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_A( stringToInt( reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					ula.read_A( stringToInt( reg.read(1)) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					ula.read_A( stringToInt( reg.read(2)) );
 				else{}
 
@@ -195,11 +234,11 @@ public:
 			void CASO10(){
 				std::string inst = mem.read(cp.getPosition());
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
@@ -209,11 +248,11 @@ public:
 				std::string inst = mem.read(cp.getPosition());
 				ula.read_B( stringToInt(mem.read(mem_dat)) );
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_A( stringToInt( reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					ula.read_A( stringToInt( reg.read(1)) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					ula.read_A( stringToInt( reg.read(2)) );
 				else{}
 
@@ -225,11 +264,11 @@ public:
 			void CASO12(){
 				std::string inst = mem.read(cp.getPosition());
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
@@ -259,11 +298,11 @@ public:
 			void CASO18(){
 				std::string inst = mem.read(cp.getPosition());
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_A( stringToInt(reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					ula.read_A( stringToInt(reg.read(0)) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					ula.read_A( stringToInt(reg.read(0)) );
 				else{}
 					PE = 19;
@@ -273,11 +312,11 @@ public:
 				std::string inst = mem.read(cp.getPosition());
 
 				ula.op(stringToInt("1101"));
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;
@@ -286,11 +325,11 @@ public:
 			void CASO20(){
 				std::string inst = mem.read(cp.getPosition());
 
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_A( stringToInt(reg.read(0)) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					ula.read_A( stringToInt(reg.read(0)) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					ula.read_A( stringToInt(reg.read(0)) );
 				else{}
 				PE = 21;
@@ -300,11 +339,11 @@ public:
 				std::string inst = mem.read(cp.getPosition());
 
 				ula.op(stringToInt("1110"));
-				if( inst.substr(5,7) == "00" )
+				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					reg.write( 0, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "01" )
+				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( inst.substr(5, 7) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" )
 					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 				PE = cp.getPosition() + 1;

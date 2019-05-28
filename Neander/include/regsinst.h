@@ -7,7 +7,7 @@ class RegsI{
 	
 		RegsI(){
 			regsi = new int[1];
-			regsi[0] = 0;
+			regsi[0] = -1;
 		}				
 
 		int readRI();

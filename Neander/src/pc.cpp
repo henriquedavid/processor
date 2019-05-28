@@ -7,8 +7,8 @@ void PC::FTE()
 	switch(EA)
 	{
 		case 0 :	//Colocando valores na memoria.
-			mem.writeM(128, binaryToDecimal("11011100"));	//220
-			mem.writeM(129, binaryToDecimal("10100111"));	//167
+			mem.writeM(128, 220);	//220
+			mem.writeM(129, -220);	//167
 			PE = mem.readM(ap.getPosition());
 			break;
 		case 1 :	//NOP - Não faz nada.
@@ -24,6 +24,9 @@ void PC::FTE()
 	    	ap.increase();
 	    	PE = mem.readM(ap.getPosition());
 	    	break;
+	    /*
+	    case 2.1:
+		*/
 	    
 	    case 3:		//LDA - Acumulador <- Memória
 	  
@@ -52,7 +55,6 @@ void PC::FTE()
 			ula.readA(mem.readM(mem.readM(ap.getPosition() + 1)));
 			ula.op(mem.readM(ap.getPosition()));
 			ap.setPosition(ula.writeResult());
-			std::cout << ula.writeResult() << "\n";
 			
 			PE = mem.readM(ap.getPosition());
 
@@ -61,6 +63,8 @@ void PC::FTE()
 		case 11:	//HLT - Finaliza o programa
 	
 			lastState = true;
+			ula.op(11);
+			ap.increase();
 
 			break;
 
@@ -79,38 +83,16 @@ bool PC::getLastState()
 	return lastState;
 }
 
-int PC::binaryToDecimal(std::string s)
+void PC::visualizarEstados()
 {
-	char str[s.length()];
-
-	strcpy(str, s.c_str());
-
-	int value = 0;
-	
-	for(unsigned int i = s.length() - 1; i >= 0; i--)
-	{
-		if(str[i] == '0')
-		{
-			str[i] = '1';
-		}
-		else
-		{
-			str[i] = '0';
-		}
-	}
-
-	for(unsigned int i = s.length - 1; i >= 0; i--)
-	{
-		if(str[i] == '0')
-		{
-			str[i] = '1';
-			break;
-		}
-		else
-		{
-			str[i] = '0';
-		}
-	}
-
-	return value;
+	regsi.writeRI(8);
+    std::cout << "Registrador:              " << regs.readR() << std::endl;
+    std::cout << "Registrador de instrução: " << regsi.readRI() << std::endl;
+    std::cout << "Contador de programa      " << ap.getPosition() << std::endl;
+    std::cout << "Zero:                     " << ula.isZero() << std::endl;
+    std::cout << "Negativo:                 " << ula.isNegative() << std::endl;
+    std::cout << "Operação da ula:          " << ula.getOperation() << std::endl;
+    std::cout << "Memória:                  " << std::endl;
+    mem.showMemory();
+    std::cout << std::endl;
 }

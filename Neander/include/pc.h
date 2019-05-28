@@ -5,14 +5,16 @@
 #include "regs.h"
 #include "mem.h"
 #include "ap.h"
+#include "regsinst.h"
 
 class PC{
 	
 	public:
 	
-		PC(ULA & _ula, Regs & _regs, Mem & _mem, AP & _ap){
+		PC(ULA & _ula, Regs & _regs, RegsI & _regsi, Mem & _mem, AP & _ap){
 			ula = _ula;
 			regs = _regs;
+			regsi = _regsi;
 			mem = _mem;
 			ap = _ap;
 			lastState = false;
@@ -25,7 +27,7 @@ class PC{
 
 		bool getLastState();
 
-		int binaryToDecimal(std::string);
+		void visualizarEstados();
 
 
 	private:
@@ -33,6 +35,7 @@ class PC{
 		int lastState;		//Último estado (condição de parada).
 		ULA ula;			
 		Regs regs;
+		RegsI regsi;
 		Mem mem;
 		AP ap;
 };

@@ -15,35 +15,58 @@ int ULA::writeResult()
 	return s;
 }
 
+bool ULA::isZero()
+{
+	return Z;
+}
+
+bool ULA::isNegative()
+{
+	return N;
+}
+
+std::string ULA::getOperation()
+{
+	return currentOperation;
+}
+
 void ULA::op(int ulaOP)
 {
 	switch(ulaOP)
 	{
 		case 1:
-			std::cout << "NOP\n";
+			currentOperation = "NOP";
 			break;
 		case 2:
 			s = a;
-			std::cout << "STA\n";
+			currentOperation = "STA";
 			break;
 		case 3:
 			s = a;
-			std::cout << "LDA\n";
+			currentOperation = "LDA";
 			break;
 		case 4: 
 			s = a + b;
 
 			if( s == 0)
 			{
-				Z = 1;
+				Z = true;
+			}
+			else
+			{
+				Z = false;
 			}
 
 			if(s < 0)
 			{
-				N = 1;
+				N = true;
+			}
+			else
+			{
+				N = false;
 			}
 
-			std::cout << "ADD" << std::endl;
+			currentOperation = "ADD";
 			break;
 
 		case 5:
@@ -51,15 +74,23 @@ void ULA::op(int ulaOP)
 
 			if( s == 0)
 			{
-				Z = 1;
+				Z = true;
+			}
+			else
+			{
+				Z = false;
 			}
 
 			if(s < 0)
 			{
-				N = 1;
+				N = true;
+			}
+			else
+			{
+				N = false;
 			}
 
-			std::cout << "OR" << std::endl;
+			currentOperation = "OR";
 			break;
 		case 6:
 
@@ -67,42 +98,62 @@ void ULA::op(int ulaOP)
 
 			if( s == 0)
 			{
-				Z = 1;
+				Z = true;
+			}
+			else
+			{
+				Z = false;
 			}
 
 			if(s < 0)
 			{
-				N = 1;
+				N = true;
+			}
+			else
+			{
+				N = false;
 			}
 
-			std::cout << "AND" << std::endl;
+			currentOperation = "AND";
 			break;
 		case 7:
 			s = not a;
 
 			if( s == 0)
 			{
-				Z = 1;
+				Z = true;
+			}
+			else
+			{
+				Z = false;
 			}
 
 			if(s < 0)
 			{
-				N = 1;
+				N = true;
+			}
+			else
+			{
+				N = false;
 			}
 
-			std::cout << "NOT" << std::endl;
+			currentOperation = "NOT";
 			break;
 		case 8:
 			s = a;
-			std::cout << "JMP" << std::endl;
+			currentOperation = "JMP";
 			break;
 		case 9:
 			if(N == 1) s = a;
-			std::cout << "JN" << std::endl;
+			currentOperation = "JN";
 			break;
 		case 10:
 			if(Z == 1) s = a;
-			std::cout << "JZ" << std::endl;
+			currentOperation = "JZ";
+			break;
+		case 11:
+			currentOperation = "HLT";
+			break;
 		default:
 			break;
 	}

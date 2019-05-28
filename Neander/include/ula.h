@@ -12,11 +12,13 @@ class ULA{
 	public:
 		
 		ULA(){
-			N = 0;
-			Z = 0;
+			N = false;
+			Z = false;
 			a = 0;
 			b = 0;
 			s = 0;
+			currentOperation = "";
+
 		}
 
 		void readA(int value);
@@ -27,9 +29,16 @@ class ULA{
 
 		void op(int ulaOP);
 
+		bool isZero();
+
+		bool isNegative();
+
+		std::string getOperation();
+
 
 	private:
 		int a, b, s;
+		std::string currentOperation;
 		bool N; //Resultado = negativo.
 		bool Z;	//Resultado = zero.
 };

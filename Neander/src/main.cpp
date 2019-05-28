@@ -95,16 +95,30 @@ void inserirInstrucoes(std::ifstream & file, Mem & mem)
     }
 }
 
+void visualizarEstados(Regs & regs, Mem & mem, AP & ap, PC & pc, ULA & ula)
+{
+    std::cout << "Registrador:              " << regs.readR() << std::endl;
+    //std::cout << "Registrador de instrução: " << regs. << std::endl;
+    std::cout << "Contador de programa      " << ap.getPosition() << std::endl;
+    std::cout << "Zero:                     " << ula.isZero() << std::endl;
+    std::cout << "Negativo:                 " << ula.isNegative() << std::endl;
+    std::cout << "Operação da ula:          " << ula.getOperation() << std::endl;
+    std::cout << "Memória:                  " << std::endl;
+    mem.showMemory();
+    std::cout << std::endl;
+}
+
 
 int main()
 {
     Regs regs;
+    RegsI regsi;
     Mem mem;
     AP ap;
     ULA ula;
     std::ifstream ifs("programa.txt");
     inserirInstrucoes(ifs, mem);
-    PC pc(ula, regs, mem, ap);
+    PC pc(ula, regs, regsi, mem, ap);
 
 
     for(int _clock=1; _clock <= 300; _clock++) {
@@ -112,6 +126,8 @@ int main()
         pc.FTE();
     
         pc.updateState();
+
+        pc.visualizarEstados();
 
         if(pc.getLastState() == true)
         {
@@ -122,7 +138,7 @@ int main()
 
     std::cout << "\nResultado: " << regs.readR() << "\n";
 
-    mem.showMemory();
+    //mem.showMemory();
 
     return 0;
 }

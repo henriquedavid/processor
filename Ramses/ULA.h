@@ -17,12 +17,13 @@ public:
 
 	void read_A( int a_ ){
 		a = a_;
-		std::cout << "RECEBIDO = " << a_ << std::endl;
+		std::cout << "REG A => " << a_ << std::endl;
 	}
 
 	//Representa o registrador
 	void read_B( int b_ ){
 		b = b_;
+		std::cout << "REG B => " << b_ << std::endl;
 	}
 
 	void read_Carry( int c ){
@@ -30,7 +31,7 @@ public:
 	}
 
 	int write_s(){
-		std::cout << "Valor de S = " << s << std::endl;
+		std::cout << "\nRESULT ULA S => " << s << std::endl;
 		return s;
 	}
 
@@ -59,6 +60,7 @@ public:
 			case 110: s = not b;
 					break;
 			case 111: s = b - a;
+			std::cout << a << " - " << b << " = " << s; 
 					break;
 			case 1000: s = a;
 					break;

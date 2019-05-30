@@ -10,7 +10,7 @@ public:
 		for(int i = 0; i < 256; i++){
 			memoria[i] = "0";
 			if(i == 128 || i == 129){
-				memoria[i] = "00000001";
+				memoria[i] = "2";
 			}
 		}
 	}

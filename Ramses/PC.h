@@ -257,11 +257,10 @@ public:
 			}
 
 			void CASO11(){
-				std::cout << "Começou a subtração!\n";
+				std::cout << "SUB!\n";
 				std::string inst = mem.read(cp.getPosition());
 
 				ula.read_A( stringToInt(mem.read(129)) );
-
 
 				if( (inst.substr(4,5)).substr(0,2) == "00" )
 					ula.read_B( stringToInt( reg.read(0)) );
@@ -276,7 +275,6 @@ public:
 
 				reg.printRegistradores();
 
-				std::cout << "VALOR1 = " << stringToInt(inst.substr(0,4)) << std::endl;
 				ula.op(stringToInt(inst.substr(0,4)));
 				cp.increase();
 
@@ -284,22 +282,17 @@ public:
 			}
 
 			void CASO12(){
-				std::cout << "\n\nResultado da subtração\n";
 				cp.down();
 				std::string inst = mem.read(cp.getPosition());
 
-				std::cout << "INST:  " << inst << std::endl;
-
-				std::cout << "REUSLT: " << inttoBitString(ula.write_s()) << std::endl;
 
 				if( (inst.substr(4,5)).substr(0,2) == "00" ){
-					std::cout << "ENTROUUUUUUUUUUUUUUUUU\n";
-					reg.write( 0, inttoBitString(ula.write_s()) );
+					reg.write( 0, intToString(ula.write_s()) );
 				}
 				else if( (inst.substr(4,5)).substr(0,2) == "01" )
-					reg.write( 1, inttoBitString(ula.write_s()) );
+					reg.write( 1, intToString(ula.write_s()) );
 				else if( (inst.substr(4,5)).substr(0,2) == "10" )
-					reg.write( 2, inttoBitString(ula.write_s()) );
+					reg.write( 2, intToString(ula.write_s()) );
 				else{}
 
 				PE = 0;

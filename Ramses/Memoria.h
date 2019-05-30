@@ -9,8 +9,11 @@ public:
 	Memoria(){
 		for(int i = 0; i < 256; i++){
 			memoria[i] = "0";
-			if(i == 128 || i == 129){
-				memoria[i] = "2";
+			if(i == 128){
+				memoria[i] = "8";
+			}
+			if(i == 129){
+				memoria[i] = "5";
 			}
 		}
 	}

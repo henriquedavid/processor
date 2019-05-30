@@ -60,7 +60,7 @@ public:
 			case 110: s = not b;
 					break;
 			case 111: s = b - a;
-			std::cout << a << " - " << b << " = " << s; 
+			std::cout << b << " - " << a << " = " << s; 
 					break;
 			case 1000: s = a;
 					break;

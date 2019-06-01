@@ -168,6 +168,28 @@ void ULA::op(int ulaOP)
 		case 11:
 			currentOperation = "HLT";
 			break;
+		case 12:
+			s = a - b;
+
+			if( s == 0)
+			{
+				Z = true;
+			}
+			else
+			{
+				Z = false;
+			}
+
+			if(s < 0)
+			{
+				N = true;
+			}
+			else
+			{
+				N = false;
+			}
+			currentOperation = "SUB";
+			break;
 		default:
 			break;
 	}

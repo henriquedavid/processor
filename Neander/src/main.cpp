@@ -73,6 +73,12 @@ void inserirInstrucoes(std::ifstream & file, Mem & mem)
                     mem.writeM(contador, 10); 
                     mem.writeM(contador + 1, endereco);   
                 }
+                else if(instrucao == "SUB")                  //JZ -> 12
+                {
+                    iss >> endereco;
+                    mem.writeM(contador, 12); 
+                    mem.writeM(contador + 1, endereco);   
+                }
             }
             else
             {
@@ -103,7 +109,7 @@ int main()
     Mem mem;
     AP ap;
     ULA ula;
-    std::ifstream ifs("soma.txt");
+    std::ifstream ifs("subtracao.txt");
     inserirInstrucoes(ifs, mem);
     PC pc(ula, regs, regsi, mem, ap);
 

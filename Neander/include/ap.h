@@ -7,6 +7,7 @@ class AP{
 		
 		AP(){
 			end = 0;
+			oldEnd = 0;
 		}
 
 		void increase();
@@ -19,6 +20,7 @@ class AP{
 
 	private:
 		int end;
+		int oldEnd;
 };
 
 #endif

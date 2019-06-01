@@ -103,12 +103,12 @@ int main()
     Mem mem;
     AP ap;
     ULA ula;
-    std::ifstream ifs("programa.txt");
+    std::ifstream ifs("soma.txt");
     inserirInstrucoes(ifs, mem);
     PC pc(ula, regs, regsi, mem, ap);
 
-
-    for(int _clock=1; _clock <= 300; _clock++) {
+    int _clock;
+    for(_clock=1; _clock <= 100; _clock++) {
         
         pc.FTE();
     
@@ -118,12 +118,11 @@ int main()
 
         if(pc.getLastState() == true)
         {
-            std::cout << "\nNúmero de ciclos: " << _clock << "\n";
             break;
         }
     }
 
-
+    std::cout << "\nNúmero de ciclos: " << _clock << "\n";
     std::cout << "Resultado: " << regs.readR() << "\n";
 
     //mem.showMemory();

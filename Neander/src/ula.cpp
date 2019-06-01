@@ -144,11 +144,25 @@ void ULA::op(int ulaOP)
 			currentOperation = "JMP";
 			break;
 		case 9:
-			if(N == 1) s = a;
+			if(N == true) 
+			{
+				s = a;
+			}
+			else
+			{
+				s = b;
+			}
 			currentOperation = "JN";
 			break;
 		case 10:
-			if(Z == 1) s = a;
+			if(Z == true)
+			{
+				s = a;
+			}
+			else
+			{
+				s = b;
+			}
 			currentOperation = "JZ";
 			break;
 		case 11:

@@ -15,7 +15,7 @@ void readFile( Memoria & memoria, CP & cp_ ){
 	int mem_codigo = 0;
 
 	std::string line;
-  	std::ifstream myfile ("adicao_variaveis_8bits.txt");
+  	std::ifstream myfile ("subrotina.txt");
   	std::string inst;
   	std::string reg;
 

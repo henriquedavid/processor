@@ -98,28 +98,33 @@ public:
 
 		std::cout << "INST = " << inst << std::endl;
 
-		bool pegar = false;
-		std::string valor = "";
+		if(inst != "-1"){
+			bool pegar = false;
+			std::string valor = "";
 
-		for( unsigned i = 0u; i < inst.size() ; i++ ){
-			if(inst[i] == ' ' || inst[i] == '+'){
-				pegar = !pegar;
+			for( unsigned i = 0u; i < inst.size() ; i++ ){
+				if(inst[i] == ' ' || inst[i] == '+'){
+					pegar = !pegar;
+					}
+				if(pegar == true){
+					valor += inst[i];
+				}
 			}
-			if(pegar == true){
-				valor += inst[i];
-			}
-		}
 
-		if( (inst.substr(4,5)).substr(0,2) == "00" )
-			mem.write( stringToInt(valor) , reg.read(0) );
-		else if( (inst.substr(4,5)).substr(0,2) == "01" )
-			mem.write( stringToInt(valor) , reg.read(1) );
-		else if( (inst.substr(4,5)).substr(0,2) == "10" )
-			mem.write( stringToInt(valor) , reg.read(2) );
-		else{}
+			if( (inst.substr(4,5)).substr(0,2) == "00" )
+				mem.write( stringToInt(valor) , reg.read(0) );
+			else if( (inst.substr(4,5)).substr(0,2) == "01" )
+				mem.write( stringToInt(valor) , reg.read(1) );
+			else if( (inst.substr(4,5)).substr(0,2) == "10" )
+				mem.write( stringToInt(valor) , reg.read(2) );
+			else{}
 		
-		reg.printRegistradores();
-		cp.increase();
+			reg.printRegistradores();
+			cp.increase();
+		} else{
+			cp.setPosition(22);
+			PE = 22;
+		}
 	}
 
 	void CASO02(){		// LDR
@@ -219,7 +224,6 @@ public:
 	}
 
 	void CASO04(){
-		std::cout << "TESTE\n";
 	}
 
 			void CASO05(){
@@ -314,6 +318,7 @@ public:
 
 				std::cout << "VERIFICAR =========== "<< inst << std::endl;
 
+				
 				bool pegar = false;
 				std::string valor = "";
 
@@ -365,7 +370,7 @@ public:
 
 			void CASO13(){
 				std::string inst = mem.read(cp.getPosition());
-				
+				if(inst != "-1"){
 				bool pegar = false;
 				std::string valor = "";
 
@@ -385,6 +390,9 @@ public:
 				PE = stringToInt(valor) - 1;
 
 				std::cout << PE << std::endl;
+			} else{
+				PE = 22;
+			}
 
 			}
 
@@ -501,7 +509,8 @@ public:
 		//std::cout << "Posição: "<< cp.getPosition() <<"\nValor na Memória = " << mem.read(cp.getPosition()) << std::endl;
 		//reg.printRegistradores();
 
-		if(PE != 0){
+
+		if(PE != 0 ){
 			if( mem.read(cp.getPosition()).substr(0, 4) == "0000" )
 				EA = 0;
 			else if( mem.read(cp.getPosition()).substr(0, 4) == "0001" )

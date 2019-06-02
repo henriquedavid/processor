@@ -389,7 +389,7 @@ public:
 				cp.setPosition(stringToInt(valor) - 1);
 				PE = stringToInt(valor) - 1;
 
-				std::cout << PE << std::endl;
+				std::cout << mem.read(cp.getPosition()).substr(0, 4) << std::endl;
 			} else{
 				PE = 22;
 			}
@@ -508,7 +508,7 @@ public:
 
 		//std::cout << "Posição: "<< cp.getPosition() <<"\nValor na Memória = " << mem.read(cp.getPosition()) << std::endl;
 		//reg.printRegistradores();
-
+		if(mem.read(cp.getPosition()).substr(0,4) != "-1"){
 
 		if(PE != 0 ){
 			if( mem.read(cp.getPosition()).substr(0, 4) == "0000" )
@@ -604,6 +604,7 @@ public:
 				break;
 		}
 
+}} else{
 }
 	}
 

@@ -8,9 +8,9 @@ private:
 public:
 	Memoria(){
 		for(int i = 0; i < 256; i++){
-			memoria[i] = "0";
+			memoria[i] = "-1";
 			if(i == 128){
-				memoria[i] = "8";
+				memoria[i] = "5";
 			}
 			if(i == 129){
 				memoria[i] = "5";
@@ -27,6 +27,12 @@ public:
 			if(i == 133){
 				memoria[i] = "2";
 			}
+			if(i == 134){
+				memoria[i] = "0";
+			}
+			if(i == 135){
+				memoria[i] = "1";	// incrementador
+			}
 
 		}
 	}
@@ -41,7 +47,7 @@ public:
 
 	void printAll(){
 		for(int i = 0; i < 256 ; i++){
-			std::cout << i << ". " << memoria[i] << std::endl;
+			std::cout << i << ". " << memoria[i] << "\n";
 		}
 	}
 };

@@ -58,8 +58,8 @@ public:
 					break;
 			case 110: s = not b;
 					break;
-			case 111: s = b - a;
-			std::cout << b << " - " << a << " = " << s; 
+			case 111: s = a - b;
+			std::cout << a << " - " << b << " = " << s; 
 					break;
 			case 1000: s = a;
 					break;

@@ -41,7 +41,7 @@ public:
 	int stringBittoInt(std::string valor){
 		int valor_ = 0;
 
-		for(int i = 0 ; i < valor.size(); i++){
+		for(unsigned i = 0u ; i < valor.size(); i++){
 			if(valor[i] == '1'){
 				valor_ += std::pow(2, i);
 			}
@@ -86,55 +86,111 @@ public:
 
 	}
 
-	void CASO01(){
-		std::string inst;
-		inst = mem.read( cp.getPosition() );
-		// Distribuir para os registradores
-		if( (inst.substr(4,5)).substr(0,2) == "00" )
-			mem.write( mem_dat , reg.read(0) );
-		else if( (inst.substr(4,5)).substr(0,2) == "01" )
-			mem.write( mem_dat , reg.read(1) );
-		else if( (inst.substr(4,5)).substr(0,2) == "10" )
-			mem.write( mem_dat , reg.read(2) );
-		else{}
-				
-		mem_dat++;
+	void CASO00(){
+		cp.increase();
+		cp.setPosition(1);
+		PE = 1;
 	}
 
-	void CASO02(){
-		std::cout << "LEITURA\n";
+	void CASO01(){	//STR
+		std::string inst;
+		inst = mem.read( cp.getPosition() );
+
+		std::cout << "INST = " << inst << std::endl;
+
+		bool pegar = false;
+		std::string valor = "";
+
+		for( unsigned i = 0u; i < inst.size() ; i++ ){
+			if(inst[i] == ' ' || inst[i] == '+'){
+				pegar = !pegar;
+			}
+			if(pegar == true){
+				valor += inst[i];
+			}
+		}
+
+		if( (inst.substr(4,5)).substr(0,2) == "00" )
+			mem.write( stringToInt(valor) , reg.read(0) );
+		else if( (inst.substr(4,5)).substr(0,2) == "01" )
+			mem.write( stringToInt(valor) , reg.read(1) );
+		else if( (inst.substr(4,5)).substr(0,2) == "10" )
+			mem.write( stringToInt(valor) , reg.read(2) );
+		else{}
+		
+		reg.printRegistradores();
+		cp.increase();
+	}
+
+	void CASO02(){		// LDR
+		std::cout << "LEITURAAAAAAA\n";
 
 		std::string inst = mem.read(cp.getPosition());
 
+
+		bool pegar = false;
+		std::string valor = "";
+
+		if(inst != "-1"){
+
+		for( unsigned i = 0u; i < inst.size() ; i++ ){
+			if(inst[i] == ' ' || inst[i] == '+'){
+				pegar = !pegar;
+			}
+			if(pegar == true){
+				valor += inst[i];
+			}
+			std::cout << inst << std::endl;
+			
+		}
+
 		if( (inst.substr(4,5)).substr(0,2) == "00" )
-			reg.write( 0 , mem.read(mem_dat) );
+			reg.write( 0 , mem.read(stringToInt(valor)) );
 		else if( (inst.substr(4,5)).substr(0,2) == "01" )
-			reg.write( 1 , mem.read(mem_dat) );
+			reg.write( 1 , mem.read(stringToInt(valor)) );
 		else if( (inst.substr(4,5)).substr(0,2) == "10" )
-			reg.write( 2 , mem.read(mem_dat) );
+			reg.write( 2 , mem.read(stringToInt(valor)) );
 		else{
 			std::cout << "ERROR!\n\n";
 		}
 
 		reg.printRegistradores();
 		cp.increase();
+	} else{
+		cp.setPosition(22);
+		PE = 22;
+	}
 	}
 
 	void CASO03(){
 
 		std::cout << "SOMA\n";
-		cp.down();
+		std::cout << cp.getPosition() << std::endl;
 
 		std::string inst = mem.read(cp.getPosition());
 
-		ula.read_A( stringToInt(mem.read(129)) );
+		bool pegar = false;
+		std::string valor = "";
 
-
-		if( (inst.substr(4,5)).substr(0,2) == "00" ){	
-			ula.read_B( stringToInt( reg.read(0)) );
+		for( unsigned i = 0u; i < inst.size() ; i++ ){
+			if(inst[i] == ' ' || inst[i] == '+'){
+				pegar = !pegar;
+			}
+			if(pegar == true){
+				valor += inst[i];
+			}
+			
 		}
+
+		std::cout << "USAR = " << valor << std::endl;
+
+
+		ula.read_A( stringToInt(mem.read(stringToInt(valor))) );
+
+		if( (inst.substr(4,5)).substr(0,2) == "00" )
+			ula.read_B( stringToInt( reg.read(0)) );
 		else if( (inst.substr(4,5)).substr(0,2) == "01" ){
-			ula.read_B( stringToInt( reg.read(1)) );	
+			ula.read_B( stringToInt( reg.read(1)) );
 		}
 		else if( (inst.substr(4,5)).substr(0,2) == "10" )
 			ula.read_B( stringToInt( reg.read(2)) );
@@ -145,28 +201,25 @@ public:
 		reg.printRegistradores();
 
 		ula.op(11);
-		cp.increase();
-		PE = 4;
-	}
-
-	void CASO04(){
-		cp.down();
-		std::string inst = mem.read(cp.getPosition());
-
 
 		if( (inst.substr(4,5)).substr(0,2) == "00" ){
 			reg.write( 0, intToString(ula.write_s()) );
 		}
 		else if( (inst.substr(4,5)).substr(0,2) == "01" )
 			reg.write( 1, intToString(ula.write_s()) );
-		else if( (inst.substr(4,5)).substr(0,2) == "10" )
+		else if( (inst.substr(4,5)).substr(0,2) == "10" ){
+			std::cout << "ATENÇÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 			reg.write( 2, intToString(ula.write_s()) );
-		else{}
+		}else{}
 
 		PE = 0;
 		reg.printRegistradores();
 		cp.increase();
+		PE = cp.getPosition();
+	}
 
+	void CASO04(){
+		std::cout << "TESTE\n";
 	}
 
 			void CASO05(){
@@ -259,15 +312,32 @@ public:
 				std::cout << "SUB!\n";
 				std::string inst = mem.read(cp.getPosition());
 
-				ula.read_A( stringToInt(mem.read(129)) );
+				std::cout << "VERIFICAR =========== "<< inst << std::endl;
+
+				bool pegar = false;
+				std::string valor = "";
+
+				for( unsigned i = 0u; i < inst.size() ; i++ ){
+					if(inst[i] == ' ' || inst[i] == '+'){
+						pegar = !pegar;
+					}
+					if(pegar == true){
+						valor += inst[i];
+					}
+			
+				}
+
+				std::cout << "Valor = " << valor << std::endl;
+
+				ula.read_B( stringToInt(mem.read(stringToInt(valor) + stringToInt(reg.read(2)))) );
 
 				if( (inst.substr(4,5)).substr(0,2) == "00" )
-					ula.read_B( stringToInt( reg.read(0)) );
+					ula.read_A( stringToInt( reg.read(0)) );
 				else if( (inst.substr(4,5)).substr(0,2) == "01" ){
-					ula.read_B( stringToInt( reg.read(1)) );
+					ula.read_A( stringToInt( reg.read(1)) );
 				}
 				else if( (inst.substr(4,5)).substr(0,2) == "10" )
-					ula.read_B( stringToInt( reg.read(2)) );
+					ula.read_A( stringToInt( reg.read(2)) );
 				else{
 					std::cout << "ERROR\n";
 				}
@@ -275,14 +345,6 @@ public:
 				reg.printRegistradores();
 
 				ula.op(stringToInt(inst.substr(0,4)));
-				cp.increase();
-
-				PE = 12;
-			}
-
-			void CASO12(){
-				cp.down();
-				std::string inst = mem.read(cp.getPosition());
 
 
 				if( (inst.substr(4,5)).substr(0,2) == "00" ){
@@ -290,29 +352,77 @@ public:
 				}
 				else if( (inst.substr(4,5)).substr(0,2) == "01" )
 					reg.write( 1, intToString(ula.write_s()) );
-				else if( (inst.substr(4,5)).substr(0,2) == "10" )
+				else if( (inst.substr(4,5)).substr(0,2) == "10" ){
 					reg.write( 2, intToString(ula.write_s()) );
+				}
 				else{}
 
-				PE = 0;
+				cp.increase();
 				reg.printRegistradores();
 			}
 
+			void CASO12(){}
+
 			void CASO13(){
-				cp.setPosition(mem_dat);
-				PE = cp.getPosition() + 1;
+				std::string inst = mem.read(cp.getPosition());
+				
+				bool pegar = false;
+				std::string valor = "";
+
+				for( unsigned i = 0u; i < inst.size() ; i++ ){
+					if(inst[i] == ' ' || inst[i] == '+'){
+						pegar = !pegar;
+					}
+					if(pegar == true){
+						valor += inst[i];
+					}
+			
+				}
+
+				std::cout << "JMP " << valor << std::endl;
+				cp.increase();
+				cp.setPosition(stringToInt(valor) - 1);
+				PE = stringToInt(valor) - 1;
+
+				std::cout << PE << std::endl;
+
 			}
 
 			void CASO14(){
+				std::string inst = mem.read(cp.getPosition());
+				std::cout << "JN = " << inst << std::endl;
+				
+				bool pegar = false;
+				std::string valor = "";
 
+				for( unsigned i = 0u; i < inst.size() ; i++ ){
+					if(inst[i] == ' ' || inst[i] == '+'){
+						pegar = !pegar;
+					}
+					if(pegar == true){
+						valor += inst[i];
+					}
+			
+				}
+
+				if(stringToInt(reg.read(0)) > 0){
+					cp.setPosition(stringToInt(valor) - 1);
+					PE = stringToInt(valor) -1;
+					std::cout << "ENTROU!!!!!!\n";
+				} else{
+					cp.setPosition(22);
+					PE = 22;
+				}
+
+				
 			}
 
 			void CASO15(){
-
+				std::cout << "A FAZER!\n";
 			}
 
 			void CASO16(){
-
+				std::cout << "A FAZER!\n";
 			}
 
 			void CASO17(){
@@ -379,7 +489,8 @@ public:
 			}
 			
 			void CASO22(){ // Representando 1111 HTL
-				cp.goToEnd();
+				PE = cp.getPosition() + 1;
+
 			}
 
 			
@@ -391,46 +502,50 @@ public:
 		//reg.printRegistradores();
 
 		if(PE != 0){
-		if( mem.read(cp.getPosition()).substr(0, 4) == "0000" )
-			EA = 0;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0001" )
-			EA = 1;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0010" )
-			EA = 2;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0011" )
-			EA = 3;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0100" )
-			EA = 5;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0101" )
-			EA = 7;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0110" )
-			EA = 9;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "0111" )
-			EA = 11;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1000" )
-			EA = 13;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1001" )
-			EA = 14;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1010" )
-			EA = 15;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1011" )
-			EA = 16;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1100" )
-			EA = 17;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1101" )
-			EA = 18;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1110" )
-			EA = 20;
-		else if( mem.read(cp.getPosition()).substr(0, 4) == "1111" )
-			EA = 22;
-		} else{
-			EA = PE;
+			if( mem.read(cp.getPosition()).substr(0, 4) == "0000" )
+				EA = 0;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0001" )
+				EA = 1;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0010" )
+				EA = 2;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0011" )
+				EA = 3;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0100" )
+				EA = 5;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0101" )
+				EA = 7;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0110" )
+				EA = 9;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "0111" )
+				EA = 11;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1000" )
+				EA = 13;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1001" )
+				EA = 14;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1010" )
+				EA = 15;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1011" )
+				EA = 16;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1100" )
+				EA = 17;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1101" )
+				EA = 18;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1110" )
+				EA = 20;
+			else if( mem.read(cp.getPosition()).substr(0, 4) == "1111" )
+				EA = 22;
+			else{
+				// nothing
+			}
+		}else{
+				EA = PE;
 		}
 
+		if(EA >= 0 && EA <= 22 ){
 
 		switch(EA){	// Cada estado representará uma instrução.
 
-			case 0:	break;
+			case 0:	CASO00(); break;
 
 			case 1: CASO01(); break;
 			
@@ -480,15 +595,9 @@ public:
 				break;
 		}
 
+}
 	}
 
-	void FS(){
-		switch(EA){
-			case 0:
-				break;
-			default: break;
-		}
-	}
 
 	void updateState(){
 		EA = PE;

@@ -15,6 +15,19 @@ public:
 			if(i == 129){
 				memoria[i] = "5";
 			}
+			if(i == 130){
+				memoria[i] = "9";
+			}
+			if(i == 131){
+				memoria[i] = "3";
+			}
+			if(i == 132){
+				memoria[i] = "4";
+			}
+			if(i == 133){
+				memoria[i] = "2";
+			}
+
 		}
 	}
 

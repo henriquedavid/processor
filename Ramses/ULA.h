@@ -50,8 +50,7 @@ public:
 			case 10:
 					s = a;
 					break;
-			case 11: s = a + b;
-					std::cout << a << " + " << b << " = " << s; 
+			case 11: s = a + b; std::cout << a << " + " << b << " = " << s; 
 					break;
 			case 100: s = a or b;
 					break;

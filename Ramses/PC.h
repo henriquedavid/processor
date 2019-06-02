@@ -123,7 +123,7 @@ public:
 	void CASO03(){
 
 		std::cout << "SOMA\n";
-
+		cp.down();
 
 		std::string inst = mem.read(cp.getPosition());
 
@@ -144,13 +144,12 @@ public:
 
 		reg.printRegistradores();
 
-		ula.op(stringToInt(inst.substr(0,4)));
+		ula.op(11);
 		cp.increase();
 		PE = 4;
 	}
 
 	void CASO04(){
-
 		cp.down();
 		std::string inst = mem.read(cp.getPosition());
 
@@ -317,6 +316,11 @@ public:
 			}
 
 			void CASO17(){
+				std::cout << "Chamada de Subrotina!" << std::endl;
+				std::string inst = mem.read(cp.getPosition());
+				mem.write(130, intToString(cp.getPosition()));
+				cp.increase();
+				PE = 3;
 
 			}
 

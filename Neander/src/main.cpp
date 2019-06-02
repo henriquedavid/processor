@@ -73,6 +73,12 @@ void inserirInstrucoes(std::ifstream & file, Mem & mem)
                     mem.writeM(contador, 10); 
                     mem.writeM(contador + 1, endereco);   
                 }
+                else if(instrucao == "SUB")                  //JZ -> 12
+                {
+                    iss >> endereco;
+                    mem.writeM(contador, 12); 
+                    mem.writeM(contador + 1, endereco);   
+                }
             }
             else
             {
@@ -103,12 +109,12 @@ int main()
     Mem mem;
     AP ap;
     ULA ula;
-    std::ifstream ifs("programa.txt");
+    std::ifstream ifs("subtracao.txt");
     inserirInstrucoes(ifs, mem);
     PC pc(ula, regs, regsi, mem, ap);
 
-
-    for(int _clock=1; _clock <= 300; _clock++) {
+    int _clock;
+    for(_clock=1; _clock <= 100; _clock++) {
         
         pc.FTE();
     
@@ -118,12 +124,11 @@ int main()
 
         if(pc.getLastState() == true)
         {
-            std::cout << "\nNúmero de ciclos: " << _clock << "\n";
             break;
         }
     }
 
-
+    std::cout << "\nNúmero de ciclos: " << _clock << "\n";
     std::cout << "Resultado: " << regs.readR() << "\n";
 
     //mem.showMemory();

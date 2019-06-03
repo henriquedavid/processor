@@ -128,7 +128,7 @@ public:
 	}
 
 	void CASO02(){		// LDR
-		std::cout << "LEITURAAAAAAA\n";
+		std::cout << "LEITURA\n";
 
 		std::string inst = mem.read(cp.getPosition());
 
@@ -145,7 +145,6 @@ public:
 			if(pegar == true){
 				valor += inst[i];
 			}
-			std::cout << inst << std::endl;
 			
 		}
 
@@ -213,7 +212,6 @@ public:
 		else if( (inst.substr(4,5)).substr(0,2) == "01" )
 			reg.write( 1, intToString(ula.write_s()) );
 		else if( (inst.substr(4,5)).substr(0,2) == "10" ){
-			std::cout << "ATENÇÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 			reg.write( 2, intToString(ula.write_s()) );
 		}else{}
 
@@ -316,7 +314,6 @@ public:
 				std::cout << "SUB!\n";
 				std::string inst = mem.read(cp.getPosition());
 
-				std::cout << "VERIFICAR =========== "<< inst << std::endl;
 
 				
 				bool pegar = false;
@@ -332,7 +329,6 @@ public:
 			
 				}
 
-				std::cout << "Valor = " << valor << std::endl;
 
 				ula.read_B( stringToInt(mem.read(stringToInt(valor) + stringToInt(reg.read(2)))) );
 
@@ -416,7 +412,6 @@ public:
 				if(stringToInt(reg.read(0)) > 0){
 					cp.setPosition(stringToInt(valor) - 1);
 					PE = stringToInt(valor) -1;
-					std::cout << "ENTROU!!!!!!\n";
 				} else{
 					cp.setPosition(22);
 					PE = 22;
